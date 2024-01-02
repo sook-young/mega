@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="./css/reset.css"> 
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/swiper-bundle.min.css"> 
+  <title>메가MGC커피</title>
+  <style>
+    /* 데스크탑 우선 */
+    
+    :root{
+      --main-color:#fdd000;
+      font-family:'Noto Sans KR';
+      font-weight:500;
+      font-size:16px;
+      color:#333;
+      line-height:1.2;
+      word-break:keep-all;
+    }
+    .container{
+      max-width:1280px;
+      margin:0 auto;
+      padding:0 20px;
+    }
+    .container-full{
+      max-width:100%;
+      padding:0;
+    }
+    .grid-container4{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:20px;
+    }
+    .grid-container6{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:20px;
+    }
+    .grid-container8{
+      display:grid;
+      grid-template-columns:repeat(8,1fr);
+      gap:20px;
+    }    
+    .grid-container12{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      gap:20px;
+    }
+    #skip-menu a{
+      position:fixed;
+      left:50%;
+      top:0;
+      z-index:2000;
+      transform:translate(-50%,-110%);
+      padding:10px;
+      background:black;
+      font-size:32px;
+      color:white;
+    }
+    #skip-menu a:focus{
+      transform:translate(-50%,0);
+    }
+    .header{
+      position:fixed;
+      left:0;
+      right:0;
+      top:0;
+      z-index:1000;
+      padding:30px 0;
+      background:transparent;      
+      transition:0.3s;
+      overflow:hidden;
+    }    
+    .header.active{
+      background:#fff;
+      box-shadow:0 0 5px rgba(0,0,0,0.2);
+    }
+    .header .container{
+      align-items:center;
+    }
+    .header h1{
+      grid-column:1/4;
+      width:200px;
+    }
+    .header .main-tit{
+      display:none;
+    }
+    .header nav{
+      grid-column:4/10;
+    }    
+    .header .main-nav{
+      gap:0;
+      font-weight:700;
+      font-size:1.1em;
+      text-align:center;
+    }
+    .header .main-nav>li{
+      position:relative;
+    }
+    .header .main-nav>li::before{
+      content:'';
+      display:none;
+      position:absolute;
+      left:0;
+      right:0;
+      top:-100px;
+      bottom:-300px;
+      background:var(--main-color);
+    }
+    .header .main-nav>li.active::before{
+      display:block;
+    }
+    .header .main-nav>li::after{
+      content:'';
+      display:block;
+      width:0;
+      height:1px;
+      background:#000;
+      position:absolute;
+      left:50%;
+      top:50px;
+      transform:translateX(-50%);
+      transition:0.3s;
+    }
+    .header .main-nav>li.active::after{
+      width:60px;
+    }
+    .header .main-nav>li>a{
+      position:relative;
+    }
+    .sub-nav{
+      position:absolute;
+      left:0;
+      right:0;
+      top:80px;
+      height:0;
+      overflow:hidden;
+      font-weight:400;
+      font-size:0.8em;
+      transition:0.3s;
+    }
+    .sub-nav li{
+      margin-bottom:0.6em;
+      color:#555;
+    }
+    .sub-nav li:hover{
+      text-decoration:underline;
+    }
+    
+    .header .sns{
+      grid-column:11/-1;
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .header .sns li{
+      width:44px;
+      height:44px;
+      margin-left:0.5em;
+      border:2px solid #000;
+      border-radius:50%;
+      padding:4px;
+    }
+    .header .sns li:hover{
+      border-color:var(--main-color);
+      background:var(--main-color);
+    }
+    .btn-nav,.btn-nav-close{
+      display:none;
+      flex-flow:row wrap;
+      align-content:space-evenly;
+      width:22px;
+      height:22px;
+      cursor:pointer;
+      text-indent:-9999px;
+      grid-column:12/-1;
+    }
+    .btn-nav-close{
+      position:fixed;
+      right:20px;
+      top:20px;
+      z-index:500;
+    }
+    .btn-nav::before,.btn-nav::after,
+    .btn-nav-close::before,.btn-nav-close::after{
+      content:'';
+      display:block;
+    }
+    .btn-nav::before,.btn-nav .line,.btn-nav::after,
+    .btn-nav-close::before,.btn-nav-close .line,.btn-nav-close::after{
+      width:100%;
+      height:2px;
+      background:#000;
+    }
+    .btn-nav-close::before,.btn-nav-close .line,.btn-nav-close::after{
+      position:absolute;
+      top:50%;      
+      background:#fff;
+    }
+    .btn-nav-close::before{
+      transform:translateY(-50%) rotate(-45deg);
+    }
+    .btn-nav-close::after{
+      transform:translateY(-50%) rotate(45deg);
+    }
+    .btn-nav-close .line{
+      transform:translateY(-50%) scaleX(0);
+    }
+
+    .sec-swiper {    
+      height: 100vh;
+    }   
+    .sec h2{
+      display:none;
+    }
+    .btn-menu a{
+      transition:0.3s;
+    }
+    .btn-menu a:hover{
+      transform:translateY(-10px);
+      opacity:0.8;
+    }
+    .sec01 .main-swiper{
+      width:100%;
+      height:100vh;
+    }
+    .sec01 .swiper-slide a{
+      display:block;
+      width:100%;
+      height:100%;
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:cover;
+      text-indent:-99999px;
+    }
+    .sec01 .swiper-slide:nth-child(1) a{
+      background-image:url('./images/main-slide01.jpg');
+    }
+    .sec01 .swiper-slide:nth-child(2) a{
+      background-image:url('./images/main-slide02.jpg');
+    }
+    .sec01 .swiper-slide:nth-child(3) a{
+      background-image:url('./images/main-slide03.jpg');
+    }
+    .sec01 .swiper-slide:nth-child(4) a{
+      background-image:url('./images/main-slide04.jpg');
+    }
+    .sec01 .swiper-slide:nth-child(5) a{
+      background-image:url('./images/main-slide05.jpg');
+    }
+    .sec01 .swiper-slide:nth-child(6) a{
+      background-image:url('./images/main-slide06.jpg');
+    }
+    .sec01 .swiper-slide:nth-child(7) a{
+      background-image:url('./images/main-slide07.jpg');
+    }
+    .sec01 .swiper-slide:nth-child(8) a{
+      background-image:url('./images/main-slide08.jpg');
+    }
+    .main-swiper-pagination{
+      left:0 ;
+      right:0 ;
+      top:auto ;
+      bottom:2em !important ;
+      z-index:1000;
+    }  
+    .sec01 .swiper-pagination-bullet{
+      width:30px;
+      height:10px;
+      border-radius:5px;
+      background:#fff;
+      opacity:0.5;
+    }  
+    .sec01 .swiper-pagination-bullet-active{
+      width:50px;
+      opacity:1;
+    }
+    .sec02 .container,.sec03 .container,.sec04 .container{
+      display:flex;
+      flex-flow:row wrap;
+      justify-content:center;
+      align-items:flex-start;
+    }
+    .art{
+      width:50%;      
+    }
+    .art-first{
+      padding:150px 40px 0 calc(50% - 515px);
+    }
+    .art-first .m-tit{
+      margin-bottom:1em;
+      font-size:1.4em;      
+    }
+    .art-first .m-tit:nth-of-type(1){
+      font-weight:400;
+    }
+    .art-first .l-tit{
+      margin-bottom:0.8em;
+      font-family:'Roboto';
+      font-weight:900;
+      font-size:3.4em;
+      line-height:1;
+    }
+    .art-first .con-txt{
+      margin-bottom:1.5em;
+      font-weight:400;
+      line-height:1.5;
+      color:#aaa;
+    }
+    .art-first .btn-menu a{
+      display:inline-block;
+      padding:1em 2em;
+      background:var(--main-color);
+      font-size:1.2em;
+    }
+    .art-last{
+      padding-top:150px;
+    }
+    .sec02 .swiper-wrapper{
+      align-items:flex-end;
+    }
+    .sec02 .swiper-slide{
+      border:1px solid #aaa;
+      border-radius:10px;
+      width:450px;
+      overflow:hidden;
+    }
+    .sec02 .swiper-slide .menu-con-box{
+      display:none;
+      padding:2em;
+      background:#f9f9f9;
+    }
+    .sec02 .swiper-slide-active .menu-con-box{
+      display:block;
+    }
+    .sec02 .art-last .l-tit{
+      margin-bottom:1em;
+      font-size:1.4em;
+    }
+    .sec02 .art-last .m-tit,
+    .sec02 .art-last .con-text{
+      margin-bottom:2em;
+      font-weight:400;
+      line-height:1.5;
+      color:#aaa;
+    }
+    .sec02 .art-last .con-text{
+      margin-bottom:0;
+    }
+    .sec02 .swiper-button-prev,
+    .sec02 .swiper-button-next{
+      top:100px;
+      left:500px;
+    }
+    .sec02 .swiper-button-next{
+      left:580px;
+    }
+    .sec02 .swiper-button-prev::after,
+    .sec02 .swiper-button-next::after{
+      font-size:70px;
+      color:var(--main-color);
+    }
+    .sec03{
+      background:var(--main-color);
+    }
+    .sec03 .art{
+      padding-top:250px;
+    }
+    .sec03 .art-first .l-tit span{
+      font-size:0.7em;
+    }
+    .sec03 iframe{
+      height:100%;
+    }
+    .sec03 .btn-view{
+      padding:1em 2em;
+      background:#333;
+      font-weight:700;
+      font-size:1.2em;
+      color:#fff;
+      text-align:center;
+    }
+    .sec04 .art-first{
+      padding-top:300px;
+    }
+    .sec04 .btn-menu a{
+      margin-right:1em;
+    }
+    .sec04 .art-last{
+      height:100vh;
+      background:url('./images/back-img.jpg') no-repeat center;
+      background-size:cover;
+    }
+    .sec05 .art-first{
+      width:100%;
+      padding-left:40px;
+      text-align:center;
+    }
+    .event-card{
+      max-width:1000px;
+      margin:0 auto 3em;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+    .event-card li{
+      border:1px solid #eee;
+      border-radius:10px;
+      overflow:hidden;      
+    }
+    .event-card li a{
+      display:flex;
+      flex-flow:column nowrap;
+    }
+    .event-card .img-box{
+      overflow:hidden;
+    }
+    .event-card .img-box img{
+      transition:0.3s;
+    }
+    .event-card .img-box img:hover{
+      transform:scale(1.1);
+    }
+    .card-con{      
+      padding:1em;
+      font-weight:300;
+      font-size:1.2em;
+      text-align:left;
+    }
+    .card-tit{
+      margin-bottom:1.5em;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    .card-date{
+      font-size:0.8em;
+    }
+    .sec-swiper-pagination{
+      right:auto !important;
+      left:40px !important;
+      top:auto !important;
+      bottom:-30px !important;
+      font-family:'Roboto';
+      font-weight:900;
+      font-size:0.8em;
+    }
+    .sec-swiper-pagination .swiper-pagination-bullet{
+      width:200px;
+      height:20px;
+      border-radius:0;
+      background:transparent;
+      display:flex !important;
+      justify-content:flex-start;
+      align-items:center;
+    }
+    .sec-swiper-pagination .swiper-pagination-bullet::before{
+      content:'';
+      display:none;
+      width:10px;
+      height:2px;
+      margin-right:10px;
+      background:#000;
+    }
+    .sec-swiper-pagination .swiper-pagination-bullet-active{
+      background:transparent;
+    }
+    .sec-swiper-pagination .swiper-pagination-bullet-active::before{
+      display:block;
+    }
+    .footer{
+      color:#fff;
+    }
+    .footer-top{
+      padding:1.5em 0;
+      background:var(--main-color);
+    }
+    .footer-top ul{
+      display:flex;
+    }
+    .footer-top li{
+      margin-right:2em;
+    }
+    .footer-bottom{
+      padding:2em 0;
+      background:#333;
+    }
+    .footer-bottom .container{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:40px;
+    }
+    .footer-left .row{
+      display:flex;
+      justify-content:flex-start;      
+      align-items:center;
+      margin-bottom:2em;
+    }
+    .footer-left .img-box:nth-of-type(1){
+      width:200px;
+      margin-right:20px;
+    }
+    .footer-left .img-box:nth-of-type(2),
+    .footer-left .img-box:nth-of-type(3),
+    .footer-left .img-box:nth-of-type(4){
+      width:40px;
+      height:40px;
+      margin-right:10px;
+      border-radius:50%;
+      background:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .footer-left address{      
+      display:grid;
+      grid-template-columns:1fr;
+      gap:0.5em;
+      font-weight:300;
+      font-size:0.8em;
+    }
+    .footer-main-nav{
+      display:grid;
+      grid-template-columns:repeat(6,auto);
+    }
+    .footer-sub-nav{
+      display:grid;
+      gap:0.5em;
+      padding-top:1em;
+      font-weight:300;
+      font-size:0.8em;
+      color:#aaa;
+    }
+    .footer-sub-nav a:hover{
+      text-decoration:underline;
+    }
+
+    
+    
+    .art-first>*{
+      transform:translateY(50px);
+      opacity:0;
+    }
+    .sec-swiper-wrapper .swiper-slide-active .art-first>*{
+      animation:move-show 0.3s forwards;
+    }
+    .sec-swiper-wrapper .swiper-slide-active .art-first>.m-tit{
+      animation-delay:0.5s;
+    }
+    .sec-swiper-wrapper .swiper-slide-active .art-first>.l-tit{
+      animation-delay:0.8s;
+    }
+    
+    .sec-swiper-wrapper .swiper-slide-active .art-first>.m-tit:nth-of-type(2){
+      animation-delay:1s;
+    }
+    .sec-swiper-wrapper .swiper-slide-active .art-first>.con-txt{
+      animation-delay:1.3s;
+    }
+    .sec-swiper-wrapper .swiper-slide-active .art-first>.btn-menu{
+      animation-delay:1.5s;
+    }
+    
+    .art-first .l-tit{
+      position:relative;
+    }
+    .art-first .l-tit span{
+      position:relative;
+      z-index:10;
+    }
+    .art-first .l-tit::after{
+      content:'';
+      display:block;
+      position:absolute;
+      left:-0.2em;
+      right:-0.2em;
+      bottom:0;
+      z-index:1;
+      height:0.5em;
+      background:var(--main-color);
+      transform:scaleX(0);
+      transition:0.4s 1.1s;
+    }
+    .sec-swiper-wrapper .swiper-slide-active .art-first .l-tit::after{
+      transform:scaleX(1);
+    }
+
+    .franchise .art-first .l-tit::after{
+      right:50%;
+      height:1em;
+      background:#fff;
+    }
+    .mega .art-first .l-tit::after{
+      right:auto;
+      width:3em;
+    }
+    .event .art-first .l-tit::after{
+      left:35%;
+      right:35%;
+    }
+
+
+
+    @keyframes move-show{
+      0%{
+        transform:translateY(50px);
+        opacity:0;
+      }
+      100%{
+        transform:translateY(0);
+        opacity:1;
+      }
+    }
+    
+
+
+
+    /*--------------------- 1280이하  시작--------------------*/
+    @media (max-width:1280px){
+      .header{
+        padding:15px 0;
+      }
+      .header .container{
+        grid-template-columns:repeat(11,1fr) auto;
+      }
+      nav{
+        position:fixed;
+        /* left:0; */
+        right:0;
+        top:0;
+        /* bottom:0; */
+        width:100%;
+        height:100%;
+        overflow:auto;
+        transform:translateX(100%);
+        padding:50px;
+        background:#222;
+        color:#fff;
+        transition:transform 0.3s;
+      }  
+      nav.active{
+        transform:translateX(0);
+      } 
+      nav::before{
+        content:'';
+        display:block;
+        width:200px;
+        height:60px;
+        margin:50px auto 100px;
+        background:url('./images/logo-w.png') no-repeat center;
+        background-size:contain;
+      }
+      .header .main-nav{
+        grid-template-columns:1fr;
+        text-align:left;
+      } 
+      .header .main-nav>li{
+        border-bottom:1px solid #333;
+        padding:20px 0 100px;
+      }
+      .btn-nav-close{
+        display:block;
+      }  
+      .header .main-nav>li.active::before{
+        display:none;
+      }
+      .header .main-nav>li.active::after{
+        width:0;
+      }
+      .sub-nav{
+        left:200px !important;
+        right:auto  !important;
+        top:20px  !important;
+        height:auto !important;  
+      }
+      .sub-nav li{
+        color:#aaa;
+      }
+      .sub-nav li:hover{
+        color:#fff;
+      }
+      .header .sns {
+        grid-column:8/12;
+      }
+      .btn-nav{
+        display:flex;
+      }
+      .art-first{
+        padding:120px 40px 0;
+        font-size:0.9em;
+      }
+      .sec02 .swiper-slide{
+        width:420px;
+        font-size:0.9em;
+      }
+      .sec02 .swiper-button-prev,
+      .sec02 .swiper-button-next{
+        display:none;
+      }      
+      .footer-top ul{
+        justify-content:center;
+        font-size:0.8em;
+      }
+      .footer-bottom .container{
+        grid-template-columns:1fr;
+      }
+      .footer-left .row{
+        justify-content:center;
+      }
+      .footer-left address{
+        display:block;
+        font-size:0.8em;
+        text-align:center;
+        line-height:1.4;
+      }
+      .footer-right{
+        display:none;
+      }
+    }
+    /*--------------------- 1280이하  끝--------------------*/
+
+
+
+
+
+    /*--------------------- 1000이하  시작--------------------*/
+    @media (max-width:1000px){
+      .sec02 .swiper-slide{
+        width:92%;
+      }
+      .event-card{
+        font-size:0.9em;
+      }
+    }
+    /*--------------------- 1000이하  끝--------------------*/
+
+
+    /*--------------------- 840이하  시작--------------------*/
+    @media (max-width:840px){
+      .sec04 .btn-menu{
+        font-size:0.9em;
+      }
+      .sec04 .btn-menu a{
+        padding:0.9em 1.8em;
+      }
+    }
+    /*--------------------- 840이하  띁--------------------*/
+
+
+
+    /*--------------------- 760이하  시작--------------------*/
+    @media (max-width:760px){     
+      .header h1{
+        width:150px;
+      }
+      nav{
+        left:auto;
+        width:240px;
+        padding-top:60px;
+        padding-left:32.5px;
+        background-size:175px;
+        font-weight:500;
+        font-size:0.8em;
+      }
+      nav::before{
+        width:175px;
+        margin:0 auto 20px;
+      }
+      .header .main-nav>li{
+        padding:20px 0;
+        border:none;
+      }
+      .header .main-nav>li.slt{
+        color:var(--main-color);
+      }
+      .sub-nav{
+        position:static;
+        padding:20px 0 0 20px;
+        display:none;
+      }
+      .header .sns{
+        display:none;
+      }
+      .sec01 .swiper-slide:nth-child(1) a{
+        background-image:url('./images/m-main-slide01.jpg');
+      }
+      .sec01 .swiper-slide:nth-child(2) a{
+        background-image:url('./images/m-main-slide02.jpg');
+      }
+      .sec01 .swiper-slide:nth-child(3) a{
+        background-image:url('./images/m-main-slide03.jpg');
+      }
+      .sec01 .swiper-slide:nth-child(4) a{
+        background-image:url('./images/m-main-slide04.jpg');
+      }
+      .sec01 .swiper-slide:nth-child(5) a{
+        background-image:url('./images/m-main-slide05.jpg');
+      }
+      .sec01 .swiper-slide:nth-child(6) a{
+        background-image:url('./images/m-main-slide06.jpg');
+      }
+      .sec01 .swiper-slide:nth-child(7) a{
+        background-image:url('./images/m-main-slide07.jpg');
+      }
+      .sec01 .swiper-slide:nth-child(8) a{
+        background-image:url('./images/m-main-slide08.jpg');
+      }
+      .art{
+        width:100%;
+      }
+      .art-first{
+        padding:110px 20px 0;
+        font-size:0.7em;
+      }
+      .art-last{
+        padding-top:30px;
+      }
+      .sec02 .swiper-slide{
+        width:200px;
+        font-size:0.6em;
+      }
+      .sec02 .swiper-slide .menu-con-box{
+        display:block;
+        padding:1.5em;
+        background:#fff;
+      }
+      .sec02 .art-last .l-tit,
+      .sec02 .art-last .m-tit,
+      .sec02 .art-last .con-text{
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
+      .sec02 .art-last .con-text{
+        white-space:normal;
+        height:30px;
+      }
+      .sec03 .art-first{
+        padding-top:80px;
+      }
+      .sec03 .art-last{
+        padding-left:10px;
+        padding-right:10px;
+        padding-top:0;
+      }
+      .sec04 .art-first{
+        margin-bottom:2em;
+        position:relative;
+        z-index:10;
+      }
+      .sec04 .btn-menu{
+        font-size:inherit;
+      }
+      .sec04 .btn-menu a{
+        padding:1em 2em;
+      }
+      .sec04 .art-last{
+        position:relative;
+        z-index:1;
+        transform:translateY(-15vh);
+        height:65vh;   
+        opacity:0.1;     
+      }
+      .event-card li{
+        grid-column:1/-1;        
+      }
+      .event-card li a{     
+        flex-flow:row nowrap;
+      }
+      .event-card .img-box{
+        width:120px;
+      }
+      .event-card .card-con{
+        display:flex;
+        flex-flow:column nowrap;
+        justify-content:space-between;
+        font-size:1rem;
+      }
+      .footer-left .img-box:nth-of-type(1){
+        width:150px;
+      }
+      .footer-left .img-box:nth-of-type(2),
+      .footer-left .img-box:nth-of-type(3),
+      .footer-left .img-box:nth-of-type(4){
+        width:32px;
+        height:32px;
+        margin-right:8px;
+      }
+      .footer-left a{
+        width:80%;
+      }
+      
+    }
+    /*--------------------- 760이하  끝--------------------*/
+
+
+
+
+
+  </style>
+</head>
+<body>
+  <div id="skip-menu"><a href="#">본문바로가기</a></div>
+  <section id="wrap">
+    <header class="header">
+      <div class="container grid-container12">
+        <h1>
+          <div class="main-tit"><a href="./index.html">메가MGC커피</a></div>
+          <div class="img-box"><a href="./index.html"><img id="header-logo" src="./images/logo-b.png" alt="메가BGC커피 로고"></a></div>
+        </h1>
+        <nav>
+          <ul class="main-nav grid-container6">
+            <li>
+              <!-- before -->
+              <a href="#">메가 스토리</a>
+              <ul class="sub-nav">
+                <li><a href="#">브랜드</a></li>
+                <li><a href="#">BI</a></li>
+                <li><a href="#">오시는 길</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">메뉴소개</a>
+              <ul class="sub-nav">
+                <li><a href="#">음료</a></li>
+                <li><a href="#">푸드</a></li>
+                <li><a href="#">상품</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">매장</a>
+              <ul class="sub-nav">
+                <li><a href="#">매장찾기</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">창업안내</a>
+              <ul class="sub-nav">
+                <li><a href="#">개설비용</a></li>
+                <li><a href="#">인테리어</a></li>
+                <li><a href="#">창업문의</a></li>
+                <li><a href="#">창업뉴스</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">메가소식</a>
+              <ul class="sub-nav">
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">이벤트</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">고객의 소리</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">채용안내</a>
+              <ul class="sub-nav">
+                <li><a href="#">채용안내</a></li>
+              </ul>
+            </li>
+          </ul>
+          <div class="btn-nav-close">
+            <div class="line">닫기</div>
+          </div>
+        </nav>
+        <ul class="sns">
+          <li><a href="#"><img src="./images/sns_blog.png" alt="blog"></a></li>
+          <li><a href="#"><img src="./images/sns_facebook.png" alt="facebook"></a></li>
+          <li><a href="#"><img src="./images/sns_instagram.png" alt="instagram"></a></li>
+        </ul>
+        <div class="btn-nav">
+          <div class="line">네비버튼</div>
+        </div>
+      </div>
+    </header>
+    <!-- Slider main container -->
+    <div class="swiper sec-swiper">
+      <!-- Additional required wrapper -->
+      <div class="swiper-wrapper sec-swiper-wrapper">
+        <!-- Slides -->
+        <section class="sec sec01 main swiper-slide">
+          <div class="container container-full">
+            <h2>MAIN</h2>
+            <div class="swiper main-swiper">
+              <div class="swiper-wrapper main-swiper-wrapper">
+                <div class="swiper-slide main-swiper-slide"><a href="#">링크1</a></div>
+                <div class="swiper-slide main-swiper-slide"><a href="#">링크2</a></div>
+                <div class="swiper-slide main-swiper-slide"><a href="#">링크3</a></div>
+                <div class="swiper-slide main-swiper-slide"><a href="#">링크4</a></div>
+                <div class="swiper-slide main-swiper-slide"><a href="#">링크5</a></div>
+                <div class="swiper-slide main-swiper-slide"><a href="#">링크6</a></div>
+                <div class="swiper-slide main-swiper-slide"><a href="#">링크7</a></div>
+                <div class="swiper-slide main-swiper-slide"><a href="#">링크8</a></div>
+              </div> 
+              <div class="swiper-pagination main-swiper-pagination"></div>
+            </div>  
+          </div>             
+        </section>
+        <section class="sec sec02 menu swiper-slide">
+          <div class="container container-full">
+            <h2>MENU</h2>
+            <article class="art art01 art-first">
+              <p class="m-tit">귀여운 악당 미니언즈의 우당탕탕</p>
+              <h3 class="l-tit"><span>Happy MEGA Party</span></h3>
+              <p class="m-tit">메가MGC커피와 미니언즈가 함께하는 겨울 신메뉴</p>
+              <p class="con-txt">
+                미니언즈를 닮은 홀케이크부터 음료, 귀여운 굿즈까지
+                <br>
+                연말 연시 파티는 가까운 메가MGC커피에서 즐겨보세요!
+              </p>
+              <div class="btn-menu"><a href="#">메뉴 더보기</a></div>
+            </article>
+            <article class="art art02 art-last">
+              <div class="swiper menu-swiper">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <div class="img-box"><img src="./images/img-slide01.jpg" alt="slide01"></div>
+                    <div class="menu-con-box">
+                      <h4 class="l-tit">추카포카 미니언즈 파티 홀케이크</h4>
+                      <p class="m-tit">Minions party Whole cake</p>
+                      <p class="con-text">[한정판매] 떠들썩한 파티타임엔 꾸덕하고 진한 초코가나슈, 달콤한 초코크림, 부드러운 우유크림이 레이어링된 미니언즈 케이크</p>
+                    </div>
+                  </div>
+                  <div class="swiper-slide">
+                    <div class="img-box"><img src="./images/img-slide02.jpg" alt="slide02"></div>
+                    <div class="menu-con-box">
+                      <h4 class="l-tit">왁자지껄 팝핑 스무디언즈</h4>
+                      <p class="m-tit">Loudly popping Minions smoothie</p>
+                      <p class="con-text">[한정판매] 달달한 바나나 우유 스무디에  톡톡 터지는 팝핑캔디가 가득! 스무디가 된 미니언즈 음료</p>
+                    </div>
+                  </div>
+                  <div class="swiper-slide">
+                    <div class="img-box"><img src="./images/img-slide03.jpg" alt="slide03"></div>
+                    <div class="menu-con-box">
+                      <h4 class="l-tit">우당탕탕 뚝딱 미니언라떼</h4>
+                      <p class="m-tit">Crack and bustle Crack! Minion Latte</p>
+                      <p class="con-text">[한정판매] 달달 고소한 바나나 라떼에 다양한 취향을 가진 미니언즈를 위한 5가지 토핑 중 하나를 선택해 즐기는 이색 라떼 음료</p>
+                    </div>
+                  </div>
+                  <div class="swiper-slide">
+                    <div class="img-box"><img src="./images/img-slide04.jpg" alt="slide04"></div>
+                    <div class="menu-con-box">
+                      <h4 class="l-tit">바나바나 초코 미니언라떼</h4>
+                      <p class="m-tit">Banana choco Minion Latte</p>
+                      <p class="con-text">[한정판매] 추운 겨울을 따뜻하고 달콤하게 채워 줄 바나나 핫초코 미니언즈 음료</p>
+                    </div>
+                  </div>
+                  <div class="swiper-slide">
+                    <div class="img-box"><img src="./images/img-slide05.jpg" alt="slide05"></div>
+                    <div class="menu-con-box">
+                      <h4 class="l-tit">미니언즈 틴토이</h4>
+                      <p class="m-tit">Minions Tin Toy</p>
+                      <p class="con-text">[한정판매] 미니언즈 콜렉터라면 수집욕구 뿜뿜! 틴케이스로 활용 가능한 랜덤 틴토이!</p>
+                    </div>
+                  </div>
+                  <div class="swiper-slide">
+                    <div class="img-box"><img src="./images/img-slide06.jpg" alt="slide06"></div>
+                    <div class="menu-con-box">
+                      <h4 class="l-tit">미니언즈 콜드컵</h4>
+                      <p class="m-tit">Minions Cold Cup</p>
+                      <p class="con-text">[한정판매] 메가MGC커피와 함께라면 미니언즈 콜드컵도 640ml 대용량</p>
+                    </div>
+                  </div>
+                  <div class="swiper-slide">
+                    <div class="img-box"><img src="./images/img-slide07.jpg" alt="slide07"></div>
+                    <div class="menu-con-box">
+                      <h4 class="l-tit">미니언즈 머들러</h4>
+                      <p class="m-tit">Minions Mudler</p>
+                      <p class="con-text">[한정수량] 스테인리스로 만들어 내구성이 강한 미니언즈 머들러로 귀여운 홈카페 완성!</p>
+                    </div>
+                  </div>
+                  <div class="swiper-slide">
+                    <div class="img-box"><img src="./images/img-slide08.jpg" alt="slide08"></div>
+                    <div class="menu-con-box">
+                      <h4 class="l-tit">미니언즈 빨대&덮개</h4>
+                      <p class="m-tit">Minions Straws & Cover</p>
+                      <p class="con-text">[한정판매] 귀여운 미니언즈 덮개로 빨대의 입구를 보호, 위생적으로 관리할 수 있는 빨대&amp;덮개</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- 이전 다음 버튼 -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+              </div>
+            </article>
+          </div>          
+        </section>
+        <section class="sec sec03 franchise swiper-slide">
+          <div class="container">
+            <h2>FRANCHISE</h2>
+            <article class="art art01 art-first">
+              <p class="m-tit">거품없는 창업비용</p>
+              <h3 class="l-tit">
+                FRANCHISE MEGA MGC COFFEE<br>
+                <span>5,817<span>만원</span></span>
+              </h3>
+              <p class="m-tit">지금, 메가MGC커피에서 창업성공 스토리를 경험해보세요.</p>
+              <p class="con-txt">합리적인 창업비용과 다양한 경험을 바탕으로, 다양한 노하우를 전수하여 창업 성공을 약속드립니다</p>
+              <!-- <div class="btn-menu"><a href="#">메뉴 더보기</a></div> -->
+            </article>
+            <article class="art art02 art-last">
+              <div class="iframe-box"><iframe src="https://www.youtube.com/embed/Ppe5NIRco8A" title="메가MGC커피 창업 정보 안내" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+              <div class="btn-view"><a href="#">창업문의 바로가기</a></div>
+            </article>
+          </div>          
+        </section>
+        <section class="sec sec04 mega swiper-slide">
+          <div class="container container-full">
+            <h2>MEGA</h2>
+            <article class="art art01 art-first">
+              <p class="m-tit">메가MGC커피 이야기</p>
+              <h3 class="l-tit"><span>MEGA SIZE & 2 SHOT</span></h3>
+              <p class="m-tit">100% 프리미엄 아라비카 원두를 로스팅하여, 깊고 부드러운 커피와 빅 사이즈로 구성된 다양한 음료를 합리적인 가격으로 제공합니다.</p>
+              <p class="con-txt">좋은 품질의 재료를, 합리적인 가격으로 제공하여 좋은 품질의 음료를 저렴한 가격으로 만나보실 수 있습니다.</p>
+              <div class="btn-menu">
+                <a href="#">브랜드 소개</a>
+                <a href="#">창업 문의</a>
+              </div>
+            </article>
+            <article class="art art02 art-last">
+              배경
+            </article>
+          </div>          
+        </section>
+        <section class="sec sec05 event swiper-slide">
+          <div class="container">
+            <h2>EVENT</h2>
+            <article class="art art01 art-first">
+              <p class="m-tit">메가MGC커피 소식</p>
+              <h3 class="l-tit"><span>MEGA EVENT</span></h3>              
+              <ul class="event-card">
+                <li>
+                  <a href="#">
+                    <div class="img-box"><img src="./images/img-event01.jpg" alt="event01"></div>
+                    <div class="card-con">
+                      <h3 class="card-tit">메가 MGC커피X미니언즈 시즌</h3>
+                      <p class="card-date">2023-12-06</p>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <div class="img-box"><img src="./images/img-event02.jpg" alt="event02"></div>
+                    <div class="card-con">
+                      <h3 class="card-tit">겨울시즌 오픈 기념 이벤트</h3>
+                      <p class="card-date">2023-10-25</p>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <div class="img-box"><img src="./images/img-event03.jpg" alt="event03"></div>
+                    <div class="card-con">
+                      <h3 class="card-tit">[이벤트] 메가 MGC커피 X 우주</h3>
+                      <p class="card-date">2023-09-25</p>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+              <p class="con-txt">전체 매장 및 각 매장에서 다양한 이벤트가 진행중 입니다.</p>
+              <div class="btn-menu"><a href="#">이벤트 더보기</a></div>
+            </article>            
+          </div>          
+        </section>
+      </div>
+      <!-- If we need pagination -->
+      <div class="sec-swiper-pagination swiper-pagination"></div>      
+    </div>
+    <footer class="footer">
+      <div class="footer-top">
+        <div class="container">
+          <ul>
+            <li><a href="#"><strong>이용약관</strong></a></li>
+            <li><a href="#"><strong>개인정보처리방침</strong></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container">
+          <div class="footer-left">
+            <div class="row">
+              <div class="img-box"><img src="./images/logo-w.png" alt="로고"></div>
+              <div class="img-box"><a href="#"><img src="./images/sns_blog.png" alt="블로그"></a></div>
+              <div class="img-box"><a href="#"><img src="./images/sns_facebook.png" alt="패이스북"></a></div>
+              <div class="img-box"><a href="#"><img src="./images/sns_instagram.png" alt="인스타그램"></a></div>
+            </div>
+            <address>
+              <span><b>주식회사 앤하우스</b> &nbsp;대표자 김대영 &nbsp;창업상담 1588-0656 &nbsp;고객센터 1588-8298 &nbsp;FAX 02-325-5199</span>
+              <span>사업자등록번호 105-87-51367 &nbsp;서울특별시 강남구 강남대로 518 11층, 13층 (주)앤하우스</span>
+              <span>개인정보보호 관리책임자 이호민</span>
+            </address>
+          </div>
+          <div class="footer-right">
+            <nav>
+              <ul class="footer-main-nav">
+                <li>
+                  <span>메가 스토리</span>
+                  <ul class="footer-sub-nav">
+                    <li><a href="#">브렌드</a></li>
+                    <li><a href="#">BI</a></li>
+                    <li><a href="#">오시는 길</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span>메가 스토리</span>
+                  <ul class="footer-sub-nav">
+                    <li><a href="#">브렌드</a></li>
+                    <li><a href="#">BI</a></li>
+                    <li><a href="#">오시는 길</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span>메가 스토리</span>
+                  <ul class="footer-sub-nav">
+                    <li><a href="#">브렌드</a></li>
+                    <li><a href="#">BI</a></li>
+                    <li><a href="#">오시는 길</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span>메가 스토리</span>
+                  <ul class="footer-sub-nav">
+                    <li><a href="#">브렌드</a></li>
+                    <li><a href="#">BI</a></li>
+                    <li><a href="#">오시는 길</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span>메가 스토리</span>
+                  <ul class="footer-sub-nav">
+                    <li><a href="#">브렌드</a></li>
+                    <li><a href="#">BI</a></li>
+                    <li><a href="#">오시는 길</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span>메가 스토리</span>
+                  <ul class="footer-sub-nav">
+                    <li><a href="#">브렌드</a></li>
+                    <li><a href="#">BI</a></li>
+                    <li><a href="#">오시는 길</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </section>
+
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/jquery.cookie.min.js"></script>
+  <script src="./js/my-function.js"></script>
+  <script src="./js/swiper-bundle.min.js"></script>
+  <script>
+    // --------- 섹션 스와이퍼 시작 -----------
+      //섹션 슬라이드 초기화
+    const secSwiper = new Swiper('.sec-swiper', {      
+      direction: 'vertical',
+      mousewheel:true,
+      speed:1000,
+      pagination: {
+        el: '.sec-swiper-pagination',
+        clickable:true,
+      },
+    });
+      //섹션 슬라이드 마지막 섹션 휠 잠금
+    secSwiper.on('reachEnd',function(){
+      secSwiper.mousewheel.disable();
+    })
+      //섹션 슬라이드 휠 방향에 따른 휠 잠금 방향
+    window.onwheel = function(e){      
+      if($('.sec05').hasClass('swiper-slide-active')){
+        if(e.deltaY>=0){
+          secSwiper.mousewheel.disable();
+        }else{
+          secSwiper.mousewheel.enable();
+        }
+      }
+    }
+      //섹션 슬라이드 체인지에 따른 헤더 효과(생상,로고)
+    secSwiper.on('slideChangeTransitionStart',function(){
+      if($('.sec01').hasClass('swiper-slide-active')){
+        removeActive($('.header'));
+        $('#header-logo').attr('src','./images/logo-b.png');
+      }else{
+        setActive($('.header'));
+        $('#header-logo').attr('src','./images/logo.png');
+      }
+    })      
+      //페이지네이션 생성 및 내용
+    $('.sec-swiper-pagination .swiper-pagination-bullet').append('<span class="page-txt"></span>');
+    for(let idx=0;idx<=$('.sec').length-1;idx++){
+      $('.page-txt').eq(idx).text($('.sec h2').eq(idx).text());
+    }    
+    // ---------- 섹션 스와이프 끝 ------------
+
+
+    // main-swiper START --------------
+      // 초기화
+      const mainSwiper = new Swiper('.main-swiper',{
+        pagination:{
+          el:'.main-swiper-pagination',
+          clickable:true,
+        },
+      });
+
+    // main-swiper END ----------------
+
+    // menu-swiper  START -------------
+    const menuSwiper = new Swiper('.menu-swiper',{       
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },      
+      slidesPerView:'auto',
+      spaceBetween:20,      
+    });
+    // menu-swiper  END ---------------
+
+    // franchise START ------------------
+    $('.sec03 .iframe-box').css({
+      height:autoHeight($('.sec03 .iframe-box').width()),
+    })
+
+    $('.header').mouseenter(function(){      
+      setActive($(this));
+    })
+    $('.header').mouseleave(function(){
+      if($('.sec01').hasClass('swiper-slide-active')){
+        removeActive($(this));
+      } 
+      let winWidth = $(window).width();
+      if(winWidth>1280){
+        setHeight($('.header'),'100px');
+        setHeight($('.sub-nav'),'0');
+      }else if(winWidth>760){
+        setHeight($('.header'),'74px');
+        setHeight($('.sub-nav'),'auto');
+      }else{
+        setHeight($('.header'),'61px');
+        setHeight($('.sub-nav'),'auto');
+      }
+    })
+    $('.main-nav li').mouseenter(function(){
+      setActive($(this));
+      let winWidth = $(window).width();
+      if(winWidth>1280){
+        setHeight($('.header'),'250px');
+        setHeight($('.sub-nav'),'150px');
+      }
+    })
+    $('.main-nav li').mouseleave(function(){
+      removeActive($(this));     
+    })
+    $(window).resize(function(){
+      let winWidth = $(window).width();
+      if(winWidth>1280){
+        setHeight($('.header'),'100px');
+      }else if(winWidth>760){
+        setHeight($('.header'),'74px');
+        $('.sub-nav').show();
+      }else{
+        setHeight($('.header'),'61px');
+      }
+      $('.sec03 .iframe-box').css({
+        height:autoHeight($('.sec03 .iframe-box').width()),
+      })
+    })
+
+    // 모바일 내비게이션
+    $('.btn-nav').click(function(){      
+      setActive($('nav'));
+    })
+    $('.btn-nav-close').click(function(){      
+      removeActive($('nav'));
+    })   
+    $('.main-nav').children('li').click(function(e){
+      let winWidth = $(window).width();
+      if(winWidth<=760){
+        e.preventDefault();        
+        $(this).children('.sub-nav').slideToggle(300);
+        $(this).toggleClass('slt');
+      }else if(winWidth<=1280){
+        e.preventDefault();
+      }
+    })
+  </script>
+</body>
+</html>
